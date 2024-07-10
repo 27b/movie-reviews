@@ -45,4 +45,32 @@ export class AuthService {
     async validateToken(token: string): Promise<Number> {
         return TOKENS[token];
     }
+
+    async validateUser(user: SignInUserWithEmailAndPasswordDTO): Promise<any> {
+        let query = { where: { email: user.email } };
+        
+        let userInDb = await this.usersRepository.findOne(query);
+
+        if (!userInDb) return null;
+
+        if (user.password != userInDb.password) return null;
+
+        // Store token in memory
+        let token = this.createToken();
+        this.storeToken(token, userInDb.id);
+
+        return { id: userInDb.id, token };
+    }
+
+    async login(user: SignInUserWithEmailAndPasswordDTO) {
+        let userInDb = await this.validateUser(user);
+
+        if (!userInDb) return null;
+
+        let token = this.createToken();
+
+        this.storeToken(token, userInDb.id);
+        
+        return { token };
+    }
 }
