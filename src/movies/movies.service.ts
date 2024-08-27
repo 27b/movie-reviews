@@ -6,37 +6,37 @@ import { CreateMovieDTO, DeleteMovieDTO, UpdateMovieDTO } from './movies.dto';
 
 @Injectable()
 export class MoviesService {
-    constructor(
-        @InjectRepository(Movie) private movieRepository: Repository<Movie>
-    ) {}
+  constructor(
+    @InjectRepository(Movie) private movieRepository: Repository<Movie>,
+  ) {}
 
-    async createMovie(userId: number, movie: CreateMovieDTO): Promise<Movie> {
-        movie.userId = userId;
-        let movieToStore = this.movieRepository.create(movie)
-        return await this.movieRepository.save(movieToStore)
-    }
+  async createMovie(userId: number, movie: CreateMovieDTO): Promise<Movie> {
+    movie.userId = userId;
+    const movieToStore = this.movieRepository.create(movie);
+    return await this.movieRepository.save(movieToStore);
+  }
 
-    async updateMovie(userId: number, movie: UpdateMovieDTO) {
-        let storedMovie = await this.findById(movie.id)
+  async updateMovie(userId: number, movie: UpdateMovieDTO) {
+    const storedMovie = await this.findById(movie.id);
 
-        if (userId != storedMovie.userId) return null
-        
-        return await this.movieRepository.save(movie)
-    }
+    if (userId != storedMovie.userId) return null;
 
-    async deleteMovie(userId: number, movie: DeleteMovieDTO) {
-        let storedMovie = await this.findById(movie.id)
+    return await this.movieRepository.save(movie);
+  }
 
-        if (userId != storedMovie.userId) return null
+  async deleteMovie(userId: number, movie: DeleteMovieDTO) {
+    const storedMovie = await this.findById(movie.id);
 
-        return await this.movieRepository.delete(movie.id)
-    }
+    if (userId != storedMovie.userId) return null;
 
-    async listMovies(): Promise<Record<string, Movie[]>> {
-        return { movies: await this.movieRepository.find() }
-    }
+    return await this.movieRepository.delete(movie.id);
+  }
 
-    async findById(id: number): Promise<Movie> {
-        return await this.movieRepository.findOne({where: { id }})
-    }
+  async listMovies(): Promise<Record<string, Movie[]>> {
+    return { movies: await this.movieRepository.find() };
+  }
+
+  async findById(id: number): Promise<Movie> {
+    return await this.movieRepository.findOne({ where: { id } });
+  }
 }

@@ -4,7 +4,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
-
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -12,10 +12,11 @@ import { DatabaseModule } from './database/database.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
+    JwtModule,
+    AuthModule,
     DatabaseModule,
     MoviesModule,
     UsersModule,
-    AuthModule
   ],
   controllers: [],
   providers: [],

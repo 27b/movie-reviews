@@ -9,7 +9,7 @@ async function bootstrap() {
   app.use(helmet());
 
   app.useGlobalPipes(new ValidationPipe());
-    
+
   await app.listen(3000);
 }
 
