@@ -22,10 +22,10 @@ export class AuthService {
 
     if (user.password != userInDb.password) return null;
 
-    let data = { id: userInDb.id };
+    const data = { id: userInDb.id };
 
-    let jwt = this.jwtService.sign(data, JWT_CONFIG);
-    
+    const jwt = this.jwtService.sign(data, JWT_CONFIG);
+
     return { token: jwt };
   }
 

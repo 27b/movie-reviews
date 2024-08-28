@@ -3,23 +3,21 @@ import {
   RegisterUserWithEmailAndPasswordsDTO,
   SignInUserWithEmailAndPasswordDTO,
 } from 'src/users/users.dto';
-import { UsersService } from 'src/users/users.service';
-import { AuthService } from './auth.service';
+import { CommandBus } from '@nestjs/cqrs';
+import { LoginUserCommand } from './commands/impl/login-user.command';
+import { RegisterUserCommand } from './commands/impl/register-user.command';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   @Post('/login')
   login(@Body() user: SignInUserWithEmailAndPasswordDTO) {
-    return this.authService.validateUser(user);
+    return this.commandBus.execute(new LoginUserCommand(user));
   }
 
   @Post('/register')
   async register(@Body() user: RegisterUserWithEmailAndPasswordsDTO) {
-    return await this.usersService.register(user);
+    return this.commandBus.execute(new RegisterUserCommand(user));
   }
 }

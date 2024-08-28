@@ -7,10 +7,20 @@ import { AuthController } from './auth.controller';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt/jwt.strategy';
+import { CqrsModule } from '@nestjs/cqrs';
+import { LoginUserHandler } from './commands/handlers/login-user.handler';
+import { RegisterUserHandler } from './commands/handlers/register-user.handler';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), PassportModule],
-  providers: [AuthService, JwtService, UsersService, JwtStrategy],
+  imports: [TypeOrmModule.forFeature([User]), PassportModule, CqrsModule],
+  providers: [
+    AuthService,
+    JwtService,
+    UsersService,
+    JwtStrategy,
+    LoginUserHandler,
+    RegisterUserHandler
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
